@@ -15,12 +15,39 @@ import {
   ArrowUpRight,
   ArrowDownLeft,
   ChevronLeft,
-  Home,
-  Banknote,
-  Activity as ActivityIcon,
   Search,
   RotateCcw,
 } from "lucide-react";
+
+// Bespoke tab icons — drawn to a shared 1.6px stroke, rounded-cap grammar so the
+// tab bar reads as one designed set instead of three icons picked from a kit.
+const TabHomeIcon = ({ active }) => (
+  <svg width="21" height="21" viewBox="0 0 24 24" fill="none">
+    <path d="M4 11.5L12 4l8 7.5" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M6.5 10v8.2a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V10" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" fill={active ? "currentColor" : "none"} fillOpacity={active ? 0.16 : 0} />
+    <path d="M10 19.2v-4.4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4.4" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+const TabAccountsIcon = ({ active }) => (
+  <svg width="21" height="21" viewBox="0 0 24 24" fill="none">
+    <path d="M4 8.2a2 2 0 0 1 2-2h8.4a2 2 0 0 1 2 2v.4H4v-.4Z" stroke="currentColor" strokeWidth="1.7" strokeLinejoin="round" fill={active ? "currentColor" : "none"} fillOpacity={active ? 0.16 : 0} />
+    <rect x="4" y="8.6" width="16" height="10.4" rx="2" stroke="currentColor" strokeWidth="1.7" />
+    <path d="M14.5 13.8a1.9 1.9 0 1 0 0 0Z" stroke="currentColor" strokeWidth="1.7" fill={active ? "currentColor" : "none"} fillOpacity={active ? 0.3 : 0} />
+  </svg>
+);
+const TabActivityIcon = ({ active }) => (
+  <svg width="21" height="21" viewBox="0 0 24 24" fill="none">
+    <path d="M6 3.8h9.2L18.5 7v13a.7.7 0 0 1-.7.7H6a.7.7 0 0 1-.7-.7V4.5a.7.7 0 0 1 .7-.7Z" stroke="currentColor" strokeWidth="1.7" strokeLinejoin="round" fill={active ? "currentColor" : "none"} fillOpacity={active ? 0.14 : 0} />
+    <path d="M15.2 3.8V7h3.3" stroke="currentColor" strokeWidth="1.7" strokeLinejoin="round" />
+    <path d="M8.2 12h6.4M8.2 15h6.4M8.2 9h3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+  </svg>
+);
+const TabAddIcon = ({ active }) => (
+  <svg width="21" height="21" viewBox="0 0 24 24" fill="none">
+    <circle cx="12" cy="12" r="8.4" stroke="currentColor" strokeWidth="1.7" fill={active ? "currentColor" : "none"} fillOpacity={active ? 0.14 : 0} />
+    <path d="M12 8.6v6.8M8.6 12h6.8" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+  </svg>
+);
 
 const CATEGORIES = {
   bank: { label: "Bank", icon: Landmark, color: "#5B8DEF" },
@@ -567,17 +594,17 @@ export default function WalletVault() {
         .vv-skeleton { background: linear-gradient(90deg, #131924 25%, #1c2432 37%, #131924 63%); background-size: 400% 100%; animation: vvShimmer 1.4s ease infinite; }
         @keyframes vvShimmer { 0% { background-position: 100% 50%; } 100% { background-position: 0 50%; } }
 
-        .vv-tabbar { flex-shrink: 0; display: flex; align-items: flex-end; justify-content: space-around;
-          padding: 8px 8px max(10px, env(safe-area-inset-bottom)); background: var(--surface);
+        .vv-tabbar { flex-shrink: 0; display: flex; align-items: center; justify-content: space-around;
+          padding: 6px 8px max(8px, env(safe-area-inset-bottom)); background: var(--surface);
           border-top: 1px solid var(--border); position: relative; z-index: 20; }
         .vv-tab { background: none; border: none; display: flex; flex-direction: column; align-items: center;
-          gap: 3px; color: var(--text-muted); font-size: 10.5px; padding: 4px 14px; cursor: pointer; width: 72px; }
+          gap: 4px; color: var(--text-muted); font-size: 10px; font-weight: 500; letter-spacing: 0.01em;
+          padding: 4px 10px 2px; cursor: pointer; width: 72px; transition: color 0.15s ease; }
         .vv-tab.active { color: var(--gold); }
-        .vv-tab:active { transform: scale(0.94); }
-        .vv-fab { width: 54px; height: 54px; border-radius: 999px; background: var(--gold); border: 5px solid var(--surface);
-          display: flex; align-items: center; justify-content: center; color: #14110A; cursor: pointer;
-          margin-top: -30px; box-shadow: 0 6px 18px rgba(201,162,39,0.35); flex-shrink: 0; }
-        .vv-fab:active { transform: scale(0.93); }
+        .vv-tab:active { transform: scale(0.96); }
+        .vv-tab-pill { display: flex; align-items: center; justify-content: center; width: 40px; height: 30px;
+          border-radius: 10px; color: inherit; transition: background 0.15s ease; }
+        .vv-tab.active .vv-tab-pill { background: rgba(201, 162, 39, 0.14); }
 
         .vv-detail-hero { margin: 4px 18px 4px; padding: 22px 4px 4px; text-align: center; }
         .vv-detail-tag { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-muted);
@@ -836,10 +863,22 @@ export default function WalletVault() {
         {/* Tab bar */}
         {!detailId && (
           <div className="vv-tabbar">
-            <button className={"vv-tab" + (activeTab === "home" ? " active" : "")} onClick={() => setActiveTab("home")}><Home size={20} /> Home</button>
-            <button className={"vv-tab" + (activeTab === "accounts" ? " active" : "")} onClick={() => setActiveTab("accounts")}><Banknote size={20} /> Accounts</button>
-            <button className="vv-fab" onClick={() => setSheet("fab")} aria-label="Quick actions"><Plus size={24} /></button>
-            <button className={"vv-tab" + (activeTab === "activity" ? " active" : "")} onClick={() => setActiveTab("activity")}><ActivityIcon size={20} /> Activity</button>
+            <button className={"vv-tab" + (activeTab === "home" ? " active" : "")} onClick={() => setActiveTab("home")}>
+              <span className="vv-tab-pill"><TabHomeIcon active={activeTab === "home"} /></span>
+              Home
+            </button>
+            <button className={"vv-tab" + (activeTab === "accounts" ? " active" : "")} onClick={() => setActiveTab("accounts")}>
+              <span className="vv-tab-pill"><TabAccountsIcon active={activeTab === "accounts"} /></span>
+              Accounts
+            </button>
+            <button className={"vv-tab" + (activeTab === "activity" ? " active" : "")} onClick={() => setActiveTab("activity")}>
+              <span className="vv-tab-pill"><TabActivityIcon active={activeTab === "activity"} /></span>
+              Activity
+            </button>
+            <button className="vv-tab" onClick={() => setSheet("fab")}>
+              <span className="vv-tab-pill"><TabAddIcon active={false} /></span>
+              Add
+            </button>
           </div>
         )}
 
