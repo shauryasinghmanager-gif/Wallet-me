@@ -42,6 +42,12 @@ const TabActivityIcon = ({ active }) => (
     <path d="M8.2 12h6.4M8.2 15h6.4M8.2 9h3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
   </svg>
 );
+const TabSettingsIcon = ({ active }) => (
+  <svg width="21" height="21" viewBox="0 0 24 24" fill="none">
+    <circle cx="12" cy="12" r="3.1" stroke="currentColor" strokeWidth="1.7" fill={active ? "currentColor" : "none"} fillOpacity={active ? 0.16 : 0} />
+    <path d="M12 4.4v2.1M12 17.5v2.1M19.6 12h-2.1M6.5 12H4.4M17.5 6.5l-1.5 1.5M8 16l-1.5 1.5M17.5 17.5L16 16M8 8 6.5 6.5" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+  </svg>
+);
 const TabAddIcon = ({ active }) => (
   <svg width="21" height="21" viewBox="0 0 24 24" fill="none">
     <circle cx="12" cy="12" r="8.4" stroke="currentColor" strokeWidth="1.7" fill={active ? "currentColor" : "none"} fillOpacity={active ? 0.14 : 0} />
@@ -235,6 +241,8 @@ export default function WalletVault() {
   const [detailId, setDetailId] = useState(null);
   const [sheet, setSheet] = useState(null);
   const [openRowId, setOpenRowId] = useState(null);
+  const [closingDetail, setClosingDetail] = useState(false);
+  const [sheetClosing, setSheetClosing] = useState(false);
 
   const [editingId, setEditingId] = useState(null);
   const [accountForm, setAccountForm] = useState(emptyAccountForm);
@@ -253,6 +261,57 @@ export default function WalletVault() {
   const toastTimerRef = useRef(null);
 
   const firstFieldRef = useRef(null);
+
+  // ---- animation: which way to slide tab content, and a measured sliding pill under the active tab ----
+  const TAB_ORDER = ["home", "accounts", "activity", "settings"];
+  const prevTabIndexRef = useRef(0);
+  const tabDirection = TAB_ORDER.indexOf(activeTab) >= prevTabIndexRef.current ? "fwd" : "back";
+  useEffect(() => { prevTabIndexRef.current = TAB_ORDER.indexOf(activeTab); }, [activeTab]);
+
+  const tabBarRef = useRef(null);
+  const tabRefs = useRef({});
+  const [indicatorStyle, setIndicatorStyle] = useState({ opacity: 0 });
+  useEffect(() => {
+    const measure = () => {
+      const el = tabRefs.current[activeTab];
+      const bar = tabBarRef.current;
+      if (el && bar) {
+        const elRect = el.getBoundingClientRect();
+        const barRect = bar.getBoundingClientRect();
+        setIndicatorStyle({ left: elRect.left - barRect.left, width: elRect.width, opacity: 1 });
+      }
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, [activeTab, detailId, loaded]);
+
+  const closeDetail = () => {
+    setClosingDetail(true);
+    setTimeout(() => { setDetailId(null); setClosingDetail(false); }, 200);
+  };
+
+  const [resetArm, setResetArm] = useState(false);
+  const resetTimerRef = useRef(null);
+  const handleResetData = () => {
+    if (!resetArm) {
+      setResetArm(true);
+      if (resetTimerRef.current) clearTimeout(resetTimerRef.current);
+      resetTimerRef.current = setTimeout(() => setResetArm(false), 3000);
+      return;
+    }
+    setResetArm(false);
+    if (resetTimerRef.current) clearTimeout(resetTimerRef.current);
+    const prevAccounts = accounts;
+    const prevTxns = txns;
+    persistAccounts([]);
+    persistTxns([]);
+    setDetailId(null);
+    showToast("All data reset", "Undo", () => {
+      persistAccounts(prevAccounts);
+      persistTxns(prevTxns);
+    });
+  };
 
   const showToast = (message, actionLabel, onAction) => {
     if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
@@ -398,7 +457,16 @@ export default function WalletVault() {
     setAccountFormError("");
     setSheet("account");
   };
-  const closeSheet = () => { setSheet(null); resetAccountForm(); setTxnFormError(""); setTransferError(""); };
+  const closeSheet = () => {
+    setSheetClosing(true);
+    setTimeout(() => {
+      setSheet(null);
+      setSheetClosing(false);
+      resetAccountForm();
+      setTxnFormError("");
+      setTransferError("");
+    }, 200);
+  };
   const submitAccountForm = () => {
     const label = accountForm.label.trim();
     const balanceNum = parseFloat(accountForm.balance);
@@ -519,9 +587,20 @@ export default function WalletVault() {
         .vv-header-btn:active { transform: scale(0.92); }
         .vv-header-actions { display: flex; gap: 2px; }
 
-        .vv-content { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; animation: vvFade 0.22s ease; position: relative; }
+        .vv-content { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; position: relative; }
         .vv-content.with-tabbar { padding-bottom: 12px; }
-        @keyframes vvFade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes vvSlideFwd { from { opacity: 0; transform: translateX(14px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes vvSlideBack { from { opacity: 0; transform: translateX(-14px); } to { opacity: 1; transform: translateX(0); } }
+        .vv-anim-fwd { animation: vvSlideFwd 0.22s cubic-bezier(.2,.8,.3,1); }
+        .vv-anim-back { animation: vvSlideBack 0.22s cubic-bezier(.2,.8,.3,1); }
+        @keyframes vvArc { from { stroke-dashoffset: 100; } to { stroke-dashoffset: 0; } }
+        .vv-arc { stroke-dasharray: 100; stroke-dashoffset: 100; animation: vvArc 0.85s cubic-bezier(.25,.75,.2,1) forwards; }
+        @keyframes vvRise { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+        .vv-rise { opacity: 0; animation: vvRise 0.4s ease forwards; }
+        @keyframes vvDetailIn { from { opacity: 0; transform: translateX(18px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes vvDetailOut { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(18px); } }
+        .vv-detail-enter { animation: vvDetailIn 0.22s cubic-bezier(.2,.8,.3,1); }
+        .vv-detail-exit { animation: vvDetailOut 0.2s ease forwards; }
 
         .vv-section { padding: 18px 18px 4px; }
         .vv-section-title { font-family: 'Fraunces', serif; font-size: 16px; font-weight: 500; }
@@ -596,15 +675,31 @@ export default function WalletVault() {
 
         .vv-tabbar { flex-shrink: 0; display: flex; align-items: center; justify-content: space-around;
           padding: 6px 8px max(8px, env(safe-area-inset-bottom)); background: var(--surface);
-          border-top: 1px solid var(--border); position: relative; z-index: 20; }
-        .vv-tab { background: none; border: none; display: flex; flex-direction: column; align-items: center;
+          border-top: 1px solid var(--border); position: relative; z-index: 20; }        .vv-tab { background: none; border: none; display: flex; flex-direction: column; align-items: center;
           gap: 4px; color: var(--text-muted); font-size: 10px; font-weight: 500; letter-spacing: 0.01em;
           padding: 4px 10px 2px; cursor: pointer; width: 72px; transition: color 0.15s ease; }
         .vv-tab.active { color: var(--gold); }
         .vv-tab:active { transform: scale(0.96); }
         .vv-tab-pill { display: flex; align-items: center; justify-content: center; width: 40px; height: 30px;
-          border-radius: 10px; color: inherit; transition: background 0.15s ease; }
-        .vv-tab.active .vv-tab-pill { background: rgba(201, 162, 39, 0.14); }
+          border-radius: 10px; color: inherit; position: relative; z-index: 1; }
+        .vv-tab-indicator { position: absolute; top: 6px; height: 30px; border-radius: 10px;
+          background: rgba(201, 162, 39, 0.14); transition: left 0.28s cubic-bezier(.2,.8,.3,1), width 0.28s cubic-bezier(.2,.8,.3,1), opacity 0.2s ease; }
+        .vv-fab-float { position: absolute; right: 18px; bottom: 84px; width: 56px; height: 56px; border-radius: 999px;
+          background: var(--gold); border: none; display: flex; align-items: center; justify-content: center;
+          color: #14110A; cursor: pointer; box-shadow: 0 10px 24px rgba(201,162,39,0.32), 0 2px 8px rgba(0,0,0,0.3);
+          z-index: 25; transition: transform 0.12s ease; }
+        .vv-fab-float:active { transform: scale(0.92); }
+
+        .vv-settings-row { display: flex; align-items: center; justify-content: space-between; padding: 13px 16px;
+          border-bottom: 1px solid var(--border); font-size: 13.5px; }
+        .vv-settings-row:last-child { border-bottom: none; }
+        .vv-settings-label { color: var(--text-muted); font-size: 12.5px; }
+        .vv-settings-value { color: var(--text); font-size: 13.5px; font-family: 'IBM Plex Mono', monospace; }
+        .vv-danger-btn { width: 100%; background: rgba(217,108,108,0.1); border: 1px solid rgba(217,108,108,0.4);
+          color: var(--neg); border-radius: 12px; padding: 13px; font-size: 13.5px; font-weight: 600; cursor: pointer;
+          display: flex; align-items: center; justify-content: center; gap: 6px; }
+        .vv-danger-btn:active { background: rgba(217,108,108,0.2); }
+        .vv-about-block { padding: 22px 24px 8px; text-align: center; color: var(--text-muted); font-size: 11.5px; line-height: 1.6; }
 
         .vv-detail-hero { margin: 4px 18px 4px; padding: 22px 4px 4px; text-align: center; }
         .vv-detail-tag { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-muted);
@@ -621,11 +716,15 @@ export default function WalletVault() {
         .vv-action-icon { width: 34px; height: 34px; border-radius: 999px; background: var(--surface-2); display: flex; align-items: center; justify-content: center; }
 
         .vv-sheet-overlay { position: absolute; inset: 0; background: rgba(5,7,10,0.68); z-index: 50; display: flex; align-items: flex-end; animation: vvBackdrop 0.18s ease; }
+        .vv-sheet-overlay.closing { animation: vvBackdropOut 0.2s ease forwards; }
         @keyframes vvBackdrop { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes vvBackdropOut { from { opacity: 1; } to { opacity: 0; } }
         .vv-sheet { width: 100%; background: var(--surface-2); border-radius: 22px 22px 0 0; border: 1px solid var(--border);
           border-bottom: none; padding: 10px 20px max(20px, env(safe-area-inset-bottom)); max-height: 86%;
           overflow-y: auto; animation: vvSlideUp 0.24s cubic-bezier(.2,.8,.3,1); }
+        .vv-sheet.closing { animation: vvSlideDown 0.2s ease forwards; }
         @keyframes vvSlideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        @keyframes vvSlideDown { from { transform: translateY(0); } to { transform: translateY(100%); } }
         .vv-drag-handle { width: 36px; height: 4px; border-radius: 999px; background: var(--border); margin: 4px auto 14px; }
         .vv-sheet-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
         .vv-sheet-title { font-family: 'Fraunces', serif; font-size: 18px; font-weight: 500; }
@@ -670,7 +769,7 @@ export default function WalletVault() {
         <div className="vv-header">
           {detailId ? (
             <>
-              <button className="vv-header-btn" onClick={() => setDetailId(null)} aria-label="Back"><ChevronLeft size={20} /></button>
+              <button className="vv-header-btn" onClick={closeDetail} aria-label="Back"><ChevronLeft size={20} /></button>
               <div className="vv-header-block"><div className="vv-header-title">{detailAcc ? detailAcc.label : ""}</div></div>
               <div className="vv-header-actions">
                 <button className="vv-header-btn" onClick={() => detailAcc && openEdit(detailAcc)} aria-label="Edit"><Pencil size={16} /></button>
@@ -681,7 +780,7 @@ export default function WalletVault() {
             <>
               <div className="vv-header-block">
                 <div className="vv-header-eyebrow"><Lock size={11} /> Net worth</div>
-                <div className="vv-header-title">{activeTab === "home" ? "Wallet" : activeTab === "accounts" ? "Accounts" : "Activity"}</div>
+                <div className="vv-header-title">{activeTab === "home" ? "Wallet" : activeTab === "accounts" ? "Accounts" : activeTab === "activity" ? "Activity" : "Settings"}</div>
               </div>
               {activeTab === "accounts" && <button className="vv-header-btn" onClick={openAdd} aria-label="Add account"><Plus size={20} /></button>}
             </>
@@ -697,7 +796,7 @@ export default function WalletVault() {
               <div className="vv-skeleton" style={{ height: 180, borderRadius: 16 }} />
             </div>
           ) : detailId && detailAcc ? (
-            <div key={detailId}>
+            <div key={detailId} className={closingDetail ? "vv-detail-exit" : "vv-detail-enter"}>
               <div className="vv-detail-hero">
                 <div className="vv-detail-tag">
                   {React.createElement(CATEGORIES[detailAcc.category].icon, { size: 13, color: CATEGORIES[detailAcc.category].color })}
@@ -743,7 +842,7 @@ export default function WalletVault() {
               </div>
             </div>
           ) : activeTab === "home" ? (
-            <div key="home">
+            <div key="home" className={tabDirection === "fwd" ? "vv-anim-fwd" : "vv-anim-back"}>
               <div className="vv-hero">
                 <div className="vv-dial-wrap">
                   <svg viewBox="0 0 320 320" width="210" height="210">
@@ -757,8 +856,9 @@ export default function WalletVault() {
                       const p2 = polarToCartesian(cx, cy, outer, angle);
                       return <line key={i} x1={p1.x} y1={p1.y} x2={p2.x} y2={p2.y} stroke={long ? "#2C3648" : "#1E2634"} strokeWidth={long ? 1.6 : 1} />;
                     })}
-                    {ringData.map((seg) => (
-                      <path key={seg.category} d={describeArc(cx, cy, r, seg.start, seg.end)} fill="none" stroke={CATEGORIES[seg.category].color} strokeWidth={stroke} strokeLinecap="round" />
+                    {ringData.map((seg, i) => (
+                      <path key={seg.category} d={describeArc(cx, cy, r, seg.start, seg.end)} fill="none" stroke={CATEGORIES[seg.category].color}
+                        strokeWidth={stroke} strokeLinecap="round" pathLength={100} className="vv-arc" style={{ animationDelay: `${i * 90}ms` }} />
                     ))}
                   </svg>
                   <div className="vv-dial-center">
@@ -768,11 +868,11 @@ export default function WalletVault() {
                   </div>
                 </div>
                 <div className="vv-legend">
-                  {CATEGORY_ORDER.filter((c) => byCategory[c].items.length > 0).map((c) => {
+                  {CATEGORY_ORDER.filter((c) => byCategory[c].items.length > 0).map((c, i) => {
                     const data = byCategory[c];
                     const pct = netWorth !== 0 ? (data.total / netWorth) * 100 : 0;
                     return (
-                      <div className="vv-legend-row" key={c}>
+                      <div className="vv-legend-row vv-rise" key={c} style={{ animationDelay: `${300 + i * 60}ms` }}>
                         <span className="vv-swatch" style={{ background: CATEGORIES[c].color }} />
                         <span className="vv-legend-label">{CATEGORIES[c].label}</span>
                         <span className="vv-legend-pct">{pct.toFixed(0)}%</span>
@@ -804,7 +904,7 @@ export default function WalletVault() {
               </div>
             </div>
           ) : activeTab === "accounts" ? (
-            <div key="accounts" style={{ paddingTop: 6 }}>
+            <div key="accounts" className={tabDirection === "fwd" ? "vv-anim-fwd" : "vv-anim-back"} style={{ paddingTop: 6 }}>
               {accounts.length === 0 && <div className="vv-group"><div className="vv-empty">No accounts yet. Tap + to add your first one.</div></div>}
               {CATEGORY_ORDER.map((c) => {
                 const data = byCategory[c];
@@ -834,8 +934,8 @@ export default function WalletVault() {
               })}
               {accounts.length > 0 && <div className="vv-footnote">Swipe an account left for quick edit or delete.</div>}
             </div>
-          ) : (
-            <div key="activity" style={{ paddingTop: 6 }}>
+          ) : activeTab === "activity" ? (
+            <div key="activity" className={tabDirection === "fwd" ? "vv-anim-fwd" : "vv-anim-back"} style={{ paddingTop: 6 }}>
               <div className="vv-search-wrap">
                 <Search size={15} />
                 <input className="vv-input" placeholder="Search transactions" value={activitySearch} onChange={(e) => setActivitySearch(e.target.value)} />
@@ -856,30 +956,80 @@ export default function WalletVault() {
                 ))
               )}
             </div>
+          ) : (
+            <div key="settings" className={tabDirection === "fwd" ? "vv-anim-fwd" : "vv-anim-back"} style={{ paddingTop: 6 }}>
+              <div className="vv-section-title" style={{ padding: "2px 18px 10px" }}>Preferences</div>
+              <div className="vv-group">
+                <div className="vv-settings-row">
+                  <span className="vv-settings-label">Appearance</span>
+                  <span className="vv-settings-value">Vault Dark</span>
+                </div>
+                <div className="vv-settings-row">
+                  <span className="vv-settings-label">Currency</span>
+                  <span className="vv-settings-value">₹ Indian Rupee</span>
+                </div>
+              </div>
+
+              <div className="vv-section-title" style={{ padding: "18px 18px 10px" }}>Your data</div>
+              <div className="vv-group">
+                <div className="vv-settings-row">
+                  <span className="vv-settings-label">Accounts</span>
+                  <span className="vv-settings-value">{accounts.length}</span>
+                </div>
+                <div className="vv-settings-row">
+                  <span className="vv-settings-label">Transactions logged</span>
+                  <span className="vv-settings-value">{txns.length}</span>
+                </div>
+                <div className="vv-settings-row">
+                  <span className="vv-settings-label">Storage</span>
+                  <span className="vv-settings-value" style={{ color: storageOk ? "var(--pos)" : "var(--neg)" }}>{storageOk ? "Synced" : "Session only"}</span>
+                </div>
+              </div>
+
+              <div style={{ margin: "18px 18px 6px" }}>
+                <button className="vv-danger-btn" onClick={handleResetData}>
+                  <Trash2 size={15} /> {resetArm ? "Tap again to confirm" : "Reset all data"}
+                </button>
+                {resetArm && <div className="vv-footnote">This clears every account and transaction. Tap once more within a few seconds to confirm.</div>}
+              </div>
+
+              <div className="vv-about-block">
+                <div style={{ fontFamily: "'Fraunces', serif", fontSize: 15, color: "var(--text)", marginBottom: 4 }}>Wallet Vault</div>
+                Version 1.0 · Your accounts and transactions are stored privately for this app and aren't visible to anyone else.
+              </div>
+            </div>
           )}
           {!storageOk && <div className="vv-footnote">Changes are kept for this session only — storage isn't available right now.</div>}
         </div>
 
         {/* Tab bar */}
         {!detailId && (
-          <div className="vv-tabbar">
+          <div className="vv-tabbar" ref={tabBarRef}>
+            <div className="vv-tab-indicator" style={indicatorStyle} />
             <button className={"vv-tab" + (activeTab === "home" ? " active" : "")} onClick={() => setActiveTab("home")}>
-              <span className="vv-tab-pill"><TabHomeIcon active={activeTab === "home"} /></span>
+              <span ref={(el) => (tabRefs.current.home = el)} className="vv-tab-pill"><TabHomeIcon active={activeTab === "home"} /></span>
               Home
             </button>
             <button className={"vv-tab" + (activeTab === "accounts" ? " active" : "")} onClick={() => setActiveTab("accounts")}>
-              <span className="vv-tab-pill"><TabAccountsIcon active={activeTab === "accounts"} /></span>
+              <span ref={(el) => (tabRefs.current.accounts = el)} className="vv-tab-pill"><TabAccountsIcon active={activeTab === "accounts"} /></span>
               Accounts
             </button>
             <button className={"vv-tab" + (activeTab === "activity" ? " active" : "")} onClick={() => setActiveTab("activity")}>
-              <span className="vv-tab-pill"><TabActivityIcon active={activeTab === "activity"} /></span>
+              <span ref={(el) => (tabRefs.current.activity = el)} className="vv-tab-pill"><TabActivityIcon active={activeTab === "activity"} /></span>
               Activity
             </button>
-            <button className="vv-tab" onClick={() => setSheet("fab")}>
-              <span className="vv-tab-pill"><TabAddIcon active={false} /></span>
-              Add
+            <button className={"vv-tab" + (activeTab === "settings" ? " active" : "")} onClick={() => setActiveTab("settings")}>
+              <span ref={(el) => (tabRefs.current.settings = el)} className="vv-tab-pill"><TabSettingsIcon active={activeTab === "settings"} /></span>
+              Settings
             </button>
           </div>
+        )}
+
+        {/* Floating quick-add button */}
+        {!detailId && (
+          <button className="vv-fab-float" onClick={() => setSheet("fab")} aria-label="Quick actions">
+            <Plus size={22} strokeWidth={2.2} />
+          </button>
         )}
 
         {/* Toast */}
@@ -896,8 +1046,8 @@ export default function WalletVault() {
 
         {/* Sheets */}
         {sheet === "fab" && (
-          <div className="vv-sheet-overlay" onClick={closeSheet}>
-            <div className="vv-sheet" onClick={(e) => e.stopPropagation()}>
+          <div className={"vv-sheet-overlay" + (sheetClosing ? " closing" : "")} onClick={closeSheet}>
+            <div className={"vv-sheet" + (sheetClosing ? " closing" : "")} onClick={(e) => e.stopPropagation()}>
               <div className="vv-drag-handle" />
               <div className="vv-sheet-head"><div className="vv-sheet-title">Quick actions</div></div>
               <div className="vv-fab-menu-item" onClick={() => { setSheet(null); openAdd(); }}>
@@ -913,8 +1063,8 @@ export default function WalletVault() {
         )}
 
         {sheet === "account" && (
-          <div className="vv-sheet-overlay" onClick={closeSheet}>
-            <div className="vv-sheet" onClick={(e) => e.stopPropagation()}>
+          <div className={"vv-sheet-overlay" + (sheetClosing ? " closing" : "")} onClick={closeSheet}>
+            <div className={"vv-sheet" + (sheetClosing ? " closing" : "")} onClick={(e) => e.stopPropagation()}>
               <div className="vv-drag-handle" />
               <div className="vv-sheet-head">
                 <div className="vv-sheet-title">{editingId ? "Edit account" : "Add account"}</div>
@@ -953,8 +1103,8 @@ export default function WalletVault() {
         )}
 
         {sheet === "transfer" && (
-          <div className="vv-sheet-overlay" onClick={closeSheet}>
-            <div className="vv-sheet" onClick={(e) => e.stopPropagation()}>
+          <div className={"vv-sheet-overlay" + (sheetClosing ? " closing" : "")} onClick={closeSheet}>
+            <div className={"vv-sheet" + (sheetClosing ? " closing" : "")} onClick={(e) => e.stopPropagation()}>
               <div className="vv-drag-handle" />
               <div className="vv-sheet-head">
                 <div className="vv-sheet-title">Transfer</div>
@@ -990,8 +1140,8 @@ export default function WalletVault() {
         )}
 
         {sheet === "txn" && detailAcc && (
-          <div className="vv-sheet-overlay" onClick={closeSheet}>
-            <div className="vv-sheet" onClick={(e) => e.stopPropagation()}>
+          <div className={"vv-sheet-overlay" + (sheetClosing ? " closing" : "")} onClick={closeSheet}>
+            <div className={"vv-sheet" + (sheetClosing ? " closing" : "")} onClick={(e) => e.stopPropagation()}>
               <div className="vv-drag-handle" />
               <div className="vv-sheet-head">
                 <div className="vv-sheet-title">Add transaction</div>
