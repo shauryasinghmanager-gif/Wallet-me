@@ -96,7 +96,7 @@
         .vv-swipe-action.edit { background: #3B4A6B; }
         .vv-swipe-action.delete { background: #7A2E2E; }
         .vv-swipe-content { position: relative; background: var(--surface); touch-action: pan-y;
-          transition: transform 0.18s ease; will-change: transform; }
+          transition: transform 0.18s ease; will-change: transform; user-select: none; -webkit-user-select: none; }
 
         .vv-row { display: flex; align-items: center; gap: 12px; padding: 13px 16px; cursor: pointer; }
         .vv-row-main { flex: 1; min-width: 0; }
@@ -620,23 +620,39 @@ function renderFab() {
 const SWIPE_WIDTH = 136;
 function attachSwipe(el, id) {
   let dragX = state.openRowId === id ? -SWIPE_WIDTH : 0;
-  let dragging = false, moved = false, startX = 0, startTranslate = 0;
+  let dragging = false, moved = false, directionDecided = false, captured = false;
+  let startX = 0, startY = 0, startTranslate = 0, pointerId = null;
   const content = el.querySelector(".vv-swipe-content");
   content.style.transform = `translateX(${dragX}px)`;
   content.addEventListener("pointerdown", (e) => {
-    dragging = true; moved = false; startX = e.clientX; startTranslate = dragX;
-    try { content.setPointerCapture(e.pointerId); } catch (err) {}
+    dragging = false; moved = false; directionDecided = false; captured = false;
+    startX = e.clientX; startY = e.clientY; startTranslate = dragX; pointerId = e.pointerId;
   });
   content.addEventListener("pointermove", (e) => {
+    if (pointerId === null || e.pointerId !== pointerId) return;
+    const deltaX = e.clientX - startX, deltaY = e.clientY - startY;
+    if (!directionDecided) {
+      // Wait for a clear enough movement before committing to a direction —
+      // this keeps normal vertical scrolling working when a swipe starts on a row.
+      if (Math.abs(deltaX) < 6 && Math.abs(deltaY) < 6) return;
+      directionDecided = true;
+      if (Math.abs(deltaX) > Math.abs(deltaY)) {
+        dragging = true;
+        try { content.setPointerCapture(pointerId); captured = true; } catch (err) {}
+      } else {
+        return; // vertical gesture — let the browser handle scrolling
+      }
+    }
     if (!dragging) return;
-    const delta = e.clientX - startX;
-    if (Math.abs(delta) > 4) moved = true;
-    dragX = Math.max(-SWIPE_WIDTH, Math.min(0, startTranslate + delta));
+    if (Math.abs(deltaX) > 4) moved = true;
+    dragX = Math.max(-SWIPE_WIDTH, Math.min(0, startTranslate + deltaX));
     content.style.transform = `translateX(${dragX}px)`;
   });
-  const finish = () => {
-    if (!dragging) return;
+  const finish = (e) => {
+    if (captured && pointerId !== null) { try { content.releasePointerCapture(pointerId); } catch (err) {} }
+    if (!dragging) { pointerId = null; return; }
     dragging = false;
+    pointerId = null;
     if (!moved) {
       if (state.openRowId === id) { state.openRowId = null; renderContent(); }
       else { openAccountDetail(id); }
