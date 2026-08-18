@@ -13,9 +13,9 @@
 <link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByeD0iMTQiIGZpbGw9IiMwQjBGMTQiLz48Y2lyY2xlIGN4PSIzMiIgY3k9IjMyIiByPSIyMCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMUEyMjMwIiBzdHJva2Utd2lkdGg9IjciLz48cGF0aCBkPSJNMzIgMTIgQTIwIDIwIDAgMCAxIDUwIDM4IiBmaWxsPSJub25lIiBzdHJva2U9IiNDOUEyMjciIHN0cm9rZS13aWR0aD0iNyIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iNCIgZmlsbD0iI0M5QTIyNyIvPjwvc3ZnPg==">
 <link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjogIldhbGxldCBWYXVsdCIsICJzaG9ydF9uYW1lIjogIldhbGxldCIsICJkZXNjcmlwdGlvbiI6ICJTZWUgd2hlcmUgeW91ciBtb25leSBpcyBcdTIwMTQgYmFuaywgY2FzaCwgdHJhZGluZywgYW5kIGludmVzdG1lbnQgYWNjb3VudHMgaW4gb25lIHBsYWNlLiIsICJzdGFydF91cmwiOiAiLiIsICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLCAiYmFja2dyb3VuZF9jb2xvciI6ICIjMEIwRjE0IiwgInRoZW1lX2NvbG9yIjogIiMwQjBGMTQiLCAiaWNvbnMiOiBbeyJzcmMiOiAiZGF0YTppbWFnZS9zdmcreG1sO2Jhc2U2NCxQSE4yWnlCNGJXeHVjejBpYUhSMGNEb3ZMM2QzZHk1M015NXZjbWN2TWpBd01DOXpkbWNpSUhacFpYZENiM2c5SWpBZ01DQTJOQ0EyTkNJK1BISmxZM1FnZDJsa2RHZzlJalkwSWlCb1pXbG5hSFE5SWpZMElpQnllRDBpTVRRaUlHWnBiR3c5SWlNd1FqQkdNVFFpTHo0OFkybHlZMnhsSUdONFBTSXpNaUlnWTNrOUlqTXlJaUJ5UFNJeU1DSWdabWxzYkQwaWJtOXVaU0lnYzNSeWIydGxQU0lqTVVFeU1qTXdJaUJ6ZEhKdmEyVXRkMmxrZEdnOUlqY2lMejQ4Y0dGMGFDQmtQU0pOTXpJZ01USWdRVEl3SURJd0lEQWdNQ0F4SURVd0lETTRJaUJtYVd4c1BTSnViMjVsSWlCemRISnZhMlU5SWlORE9VRXlNamNpSUhOMGNtOXJaUzEzYVdSMGFEMGlOeUlnYzNSeWIydGxMV3hwYm1WallYQTlJbkp2ZFc1a0lpOCtQR05wY21Oc1pTQmplRDBpTXpJaUlHTjVQU0l6TWlJZ2NqMGlOQ0lnWm1sc2JEMGlJME01UVRJeU55SXZQand2YzNablBnPT0iLCAic2l6ZXMiOiAiNjR4NjQiLCAidHlwZSI6ICJpbWFnZS9zdmcreG1sIiwgInB1cnBvc2UiOiAiYW55In1dfQ==">
 <style>
-        @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+        /* No external font import — everything below uses local/system fonts so the app works fully offline. */
 
-        .vv-wrap { height: 100dvh; width: 100vw; overflow: hidden; background: #0B0F14; font-family: 'IBM Plex Sans', sans-serif; }
+        .vv-wrap { height: 100dvh; width: 100vw; overflow: hidden; background: #0B0F14; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
         .vv-wrap * { box-sizing: border-box; }
 
         .vv-app {
@@ -31,7 +31,7 @@
           background: var(--bg); z-index: 5; }
         .vv-header-eyebrow { display: flex; align-items: center; gap: 6px; color: var(--text-muted);
           font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 3px; }
-        .vv-header-title { font-family: 'Fraunces', serif; font-weight: 500; font-size: 20px; }
+        .vv-header-title { font-family: Georgia, 'Times New Roman', serif; font-weight: 500; font-size: 20px; }
         .vv-header-block { flex: 1; }
         .vv-header-btn { background: transparent; border: none; color: var(--text); width: 34px; height: 34px;
           border-radius: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; }
@@ -55,7 +55,7 @@
         .vv-detail-exit { animation: vvDetailOut 0.2s ease forwards; }
 
         .vv-section { padding: 18px 18px 4px; }
-        .vv-section-title { font-family: 'Fraunces', serif; font-size: 16px; font-weight: 500; }
+        .vv-section-title { font-family: Georgia, 'Times New Roman', serif; font-size: 16px; font-weight: 500; }
         .vv-see-all { font-size: 12px; color: var(--gold); background: none; border: none; cursor: pointer; }
 
         .vv-hero { margin: 4px 18px 16px; background: linear-gradient(180deg, var(--surface) 0%, #10151F 100%);
@@ -64,20 +64,20 @@
         .vv-dial-wrap { position: relative; width: 210px; height: 210px; }
         .vv-dial-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
         .vv-networth-label { font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px; }
-        .vv-networth-figure { font-family: 'Fraunces', serif; font-weight: 500; font-size: 26px; letter-spacing: -0.01em; font-variant-numeric: tabular-nums; }
-        .vv-networth-sub { font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: var(--text-muted); margin-top: 6px; }
+        .vv-networth-figure { font-family: Georgia, 'Times New Roman', serif; font-weight: 500; font-size: 26px; letter-spacing: -0.01em; font-variant-numeric: tabular-nums; }
+        .vv-networth-sub { font-family: 'SFMono-Regular', Menlo, Consolas, monospace; font-size: 10.5px; color: var(--text-muted); margin-top: 6px; }
         .vv-legend { width: 100%; display: flex; flex-direction: column; gap: 9px; }
         .vv-legend-row { display: flex; align-items: center; gap: 9px; font-size: 13.5px; }
         .vv-swatch { width: 9px; height: 9px; border-radius: 2px; flex-shrink: 0; }
         .vv-legend-label { color: var(--text); flex: 1; }
-        .vv-legend-pct { font-family: 'IBM Plex Mono', monospace; color: var(--text-muted); font-size: 12px; }
-        .vv-legend-amt { font-family: 'IBM Plex Mono', monospace; color: var(--text); font-size: 12.5px; min-width: 84px; text-align: right; }
+        .vv-legend-pct { font-family: 'SFMono-Regular', Menlo, Consolas, monospace; color: var(--text-muted); font-size: 12px; }
+        .vv-legend-amt { font-family: 'SFMono-Regular', Menlo, Consolas, monospace; color: var(--text); font-size: 12.5px; min-width: 84px; text-align: right; }
 
         .vv-stat-card { margin: 0 18px 20px; display: flex; align-items: center; background: var(--surface);
           border: 1px solid var(--border); border-radius: 16px; padding: 14px 16px; }
         .vv-stat-col { flex: 1; min-width: 0; }
         .vv-stat-label { font-size: 10.5px; color: var(--text-muted); display: flex; align-items: center; gap: 5px; margin-bottom: 6px; white-space: nowrap; }
-        .vv-stat-value { font-family: 'IBM Plex Mono', monospace; font-size: 14.5px; }
+        .vv-stat-value { font-family: 'SFMono-Regular', Menlo, Consolas, monospace; font-size: 14.5px; }
         .vv-stat-value.pos { color: var(--pos); }
         .vv-stat-value.neg { color: var(--neg); }
         .vv-stat-divider { width: 1px; align-self: stretch; background: var(--border); margin: 0 14px; }
@@ -86,7 +86,7 @@
         .vv-group-head { display: flex; align-items: center; gap: 10px; padding: 13px 16px; background: var(--surface-2); border-bottom: 1px solid var(--border); }
         .vv-group-icon { width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
         .vv-group-name { font-weight: 600; font-size: 13.5px; flex: 1; }
-        .vv-group-total { font-family: 'IBM Plex Mono', monospace; font-size: 13.5px; }
+        .vv-group-total { font-family: 'SFMono-Regular', Menlo, Consolas, monospace; font-size: 13.5px; }
 
         .vv-swipe-wrap { position: relative; overflow: hidden; border-bottom: 1px solid var(--border); }
         .vv-swipe-wrap:last-child { border-bottom: none; }
@@ -102,7 +102,7 @@
         .vv-row-main { flex: 1; min-width: 0; }
         .vv-row-label { font-size: 14px; color: var(--text); }
         .vv-row-inst { font-size: 11.5px; color: var(--text-muted); margin-top: 2px; }
-        .vv-row-balance { font-family: 'IBM Plex Mono', monospace; font-size: 13.5px; color: var(--text); text-align: right; }
+        .vv-row-balance { font-family: 'SFMono-Regular', Menlo, Consolas, monospace; font-size: 13.5px; color: var(--text); text-align: right; }
         .vv-row-eye { background: none; border: none; color: var(--text-muted); width: 26px; height: 26px;
           border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; }
         .vv-row-eye:hover { background: var(--surface-2); color: var(--text); }
@@ -114,7 +114,7 @@
         .vv-txn-main { flex: 1; min-width: 0; }
         .vv-txn-note { font-size: 13.5px; color: var(--text); }
         .vv-txn-meta { font-size: 11.5px; color: var(--text-muted); margin-top: 2px; }
-        .vv-txn-amt { font-family: 'IBM Plex Mono', monospace; font-size: 13.5px; flex-shrink: 0; }
+        .vv-txn-amt { font-family: 'SFMono-Regular', Menlo, Consolas, monospace; font-size: 13.5px; flex-shrink: 0; }
         .vv-date-heading { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); padding: 14px 16px 6px; }
         .vv-empty { padding: 18px 16px; color: var(--text-muted); font-size: 13px; font-style: italic; }
 
@@ -149,7 +149,7 @@
           border-bottom: 1px solid var(--border); font-size: 13.5px; }
         .vv-settings-row:last-child { border-bottom: none; }
         .vv-settings-label { color: var(--text-muted); font-size: 12.5px; }
-        .vv-settings-value { color: var(--text); font-size: 13.5px; font-family: 'IBM Plex Mono', monospace; }
+        .vv-settings-value { color: var(--text); font-size: 13.5px; font-family: 'SFMono-Regular', Menlo, Consolas, monospace; }
         .vv-danger-btn { width: 100%; background: rgba(217,108,108,0.1); border: 1px solid rgba(217,108,108,0.4);
           color: var(--neg); border-radius: 12px; padding: 13px; font-size: 13.5px; font-weight: 600; cursor: pointer;
           display: flex; align-items: center; justify-content: center; gap: 6px; }
@@ -174,7 +174,7 @@
         .vv-detail-tag { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-muted);
           background: var(--surface-2); padding: 5px 12px; border-radius: 999px; margin-bottom: 14px; }
         .vv-detail-balance-label { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); }
-        .vv-detail-balance { font-family: 'Fraunces', serif; font-size: 34px; margin-top: 6px; font-variant-numeric: tabular-nums; }
+        .vv-detail-balance { font-family: Georgia, 'Times New Roman', serif; font-size: 34px; margin-top: 6px; font-variant-numeric: tabular-nums; }
         .vv-detail-inst { font-size: 12.5px; color: var(--text-muted); margin-top: 4px; }
         .vv-sparkline { width: 100%; height: 48px; margin-top: 16px; }
         .vv-detail-actions { display: flex; gap: 10px; margin: 20px 18px 8px; }
@@ -196,12 +196,12 @@
         @keyframes vvSlideDown { from { transform: translateY(0); } to { transform: translateY(100%); } }
         .vv-drag-handle { width: 36px; height: 4px; border-radius: 999px; background: var(--border); margin: 4px auto 14px; }
         .vv-sheet-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
-        .vv-sheet-title { font-family: 'Fraunces', serif; font-size: 18px; font-weight: 500; }
+        .vv-sheet-title { font-family: Georgia, 'Times New Roman', serif; font-size: 18px; font-weight: 500; }
 
         .vv-field { margin-bottom: 14px; }
         .vv-field label { display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 6px; }
         .vv-input, .vv-select { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 10px;
-          padding: 12px 13px; color: var(--text); font-size: 15px; font-family: 'IBM Plex Sans', sans-serif; }
+          padding: 12px 13px; color: var(--text); font-size: 15px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
         .vv-input:focus, .vv-select:focus { outline: 2px solid var(--gold); outline-offset: 1px; border-color: transparent; }
         .vv-cat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
         .vv-cat-opt { display: flex; flex-direction: column; align-items: center; gap: 5px; border: 1px solid var(--border);
@@ -834,7 +834,7 @@ function settingsHTML() {
     </div>
 
     <div class="vv-about-block">
-      <div style="font-family:'Fraunces',serif;font-size:15px;color:var(--text);margin-bottom:4px">Wallet Vault</div>
+      <div style="font-family:Georgia,'Times New Roman',serif;font-size:15px;color:var(--text);margin-bottom:4px">Wallet Vault</div>
       Version 1.0 · Your accounts and transactions are stored on this device's browser storage and aren't visible to anyone else.
     </div>`;
 }
