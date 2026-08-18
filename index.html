@@ -322,8 +322,10 @@ const store = {
 
 /* ---------- formatting helpers ---------- */
 function formatINR(n) {
-  const sign = n < 0 ? "-" : "";
-  const abs = Math.abs(Math.round(n));
+  const num = Number(n);
+  const safe = Number.isFinite(num) ? num : 0;
+  const sign = safe < 0 ? "-" : "";
+  const abs = Math.abs(Math.round(safe));
   return sign + "₹" + abs.toLocaleString("en-IN");
 }
 function formatTime(iso) { return new Date(iso).toLocaleTimeString("en-IN", { hour: "numeric", minute: "2-digit" }); }
@@ -623,6 +625,7 @@ function attachSwipe(el, id) {
   content.style.transform = `translateX(${dragX}px)`;
   content.addEventListener("pointerdown", (e) => {
     dragging = true; moved = false; startX = e.clientX; startTranslate = dragX;
+    try { content.setPointerCapture(e.pointerId); } catch (err) {}
   });
   content.addEventListener("pointermove", (e) => {
     if (!dragging) return;
@@ -662,9 +665,10 @@ function homeHTML() {
     ticks += `<line x1="${p1.x}" y1="${p1.y}" x2="${p2.x}" y2="${p2.y}" stroke="${long ? "#2C3648" : "#1E2634"}" stroke-width="${long ? 1.6 : 1}"/>`;
   }
   const arcs = ring.map((seg, i) => `<path d="${describeArc(cx, cy, r, seg.start, seg.end)}" fill="none" stroke="${CATEGORIES[seg.category].color}" stroke-width="${stroke}" stroke-linecap="round" pathLength="100" class="vv-arc" style="animation-delay:${i * 90}ms"/>`).join("");
+  const positiveTotal = CATEGORY_ORDER.reduce((s, c) => s + Math.max(byCategory[c].total, 0), 0);
   const legend = CATEGORY_ORDER.filter((c) => byCategory[c].items.length > 0).map((c, i) => {
     const data = byCategory[c];
-    const pct = netWorth !== 0 ? (data.total / netWorth) * 100 : 0;
+    const pct = positiveTotal > 0 ? (Math.max(data.total, 0) / positiveTotal) * 100 : 0;
     return `
       <div class="vv-legend-row vv-rise" style="animation-delay:${300 + i * 60}ms">
         <span class="vv-swatch" style="background:${CATEGORIES[c].color}"></span>
@@ -924,8 +928,6 @@ function wireContentEvents() {
     const search = document.getElementById("activitySearchInput");
     if (search) {
       search.oninput = () => { state.activitySearch = search.value; renderActivityListOnly(); };
-      search.focus();
-      search.selectionStart = search.selectionEnd = search.value.length;
     }
   }
   if (state.activeTab === "settings") wireSettingsEvents();
@@ -1058,13 +1060,44 @@ function handleImportFile(e) {
   reader.onload = () => {
     try {
       const data = JSON.parse(reader.result);
-      const importedAccounts = Array.isArray(data.accounts) ? data.accounts : null;
-      const importedTxns = Array.isArray(data.transactions) ? data.transactions : null;
-      if (!importedAccounts || !importedTxns) { showToast("That file doesn't look like a Wallet Vault backup"); return; }
+      const rawAccounts = Array.isArray(data.accounts) ? data.accounts : null;
+      const rawTxns = Array.isArray(data.transactions) ? data.transactions : null;
+      if (!rawAccounts || !rawTxns) { showToast("That file doesn't look like a Wallet Vault backup"); return; }
+
+      const validIds = new Set();
+      const importedAccounts = rawAccounts
+        .filter((a) => a && typeof a.id === "string" && typeof a.label === "string" && a.label.trim())
+        .map((a) => {
+          validIds.add(a.id);
+          return {
+            id: a.id,
+            label: a.label.trim(),
+            institution: typeof a.institution === "string" ? a.institution : "",
+            category: CATEGORIES[a.category] ? a.category : "other",
+            balance: Number.isFinite(Number(a.balance)) ? Number(a.balance) : 0,
+          };
+        });
+      const importedTxns = rawTxns
+        .filter((t) => t && validIds.has(t.accountId) && (t.type === "credit" || t.type === "debit") && !isNaN(new Date(t.date).getTime()))
+        .map((t) => ({
+          id: typeof t.id === "string" ? t.id : genId(),
+          accountId: t.accountId,
+          type: t.type,
+          amount: Number.isFinite(Number(t.amount)) ? Math.abs(Number(t.amount)) : 0,
+          note: typeof t.note === "string" && t.note.trim() ? t.note.trim() : (t.type === "credit" ? "Money in" : "Money out"),
+          date: new Date(t.date).toISOString(),
+          transferId: typeof t.transferId === "string" ? t.transferId : undefined,
+        }));
+
+      if (importedAccounts.length === 0) { showToast("No valid accounts found in that file"); return; }
+
       const prevAccounts = state.accounts, prevTxns = state.txns;
       persistAccounts(importedAccounts); persistTxns(importedTxns);
-      renderHeader(); renderContent();
-      showToast(`Imported ${importedAccounts.length} account${importedAccounts.length === 1 ? "" : "s"}`, "Undo", () => { persistAccounts(prevAccounts); persistTxns(prevTxns); renderContent(); });
+      state.detailId = null; state.openRowId = null; state.activityFilter = "all"; state.activitySearch = "";
+      renderHeader(); renderContent(); renderTabbar(); renderFab();
+      showToast(`Imported ${importedAccounts.length} account${importedAccounts.length === 1 ? "" : "s"}`, "Undo", () => {
+        persistAccounts(prevAccounts); persistTxns(prevTxns); renderHeader(); renderContent(); renderTabbar(); renderFab();
+      });
     } catch (err) {
       showToast("Couldn't read that file — is it a valid backup?");
     } finally { e.target.value = ""; }
