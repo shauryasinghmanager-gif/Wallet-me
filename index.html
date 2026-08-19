@@ -13,9 +13,9 @@
 <link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByeD0iMTQiIGZpbGw9IiMwQjBGMTQiLz48Y2lyY2xlIGN4PSIzMiIgY3k9IjMyIiByPSIyMCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMUEyMjMwIiBzdHJva2Utd2lkdGg9IjciLz48cGF0aCBkPSJNMzIgMTIgQTIwIDIwIDAgMCAxIDUwIDM4IiBmaWxsPSJub25lIiBzdHJva2U9IiNDOUEyMjciIHN0cm9rZS13aWR0aD0iNyIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iNCIgZmlsbD0iI0M5QTIyNyIvPjwvc3ZnPg==">
 <link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjogIldhbGxldCBWYXVsdCIsICJzaG9ydF9uYW1lIjogIldhbGxldCIsICJkZXNjcmlwdGlvbiI6ICJTZWUgd2hlcmUgeW91ciBtb25leSBpcyBcdTIwMTQgYmFuaywgY2FzaCwgdHJhZGluZywgYW5kIGludmVzdG1lbnQgYWNjb3VudHMgaW4gb25lIHBsYWNlLiIsICJzdGFydF91cmwiOiAiLiIsICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLCAiYmFja2dyb3VuZF9jb2xvciI6ICIjMEIwRjE0IiwgInRoZW1lX2NvbG9yIjogIiMwQjBGMTQiLCAiaWNvbnMiOiBbeyJzcmMiOiAiZGF0YTppbWFnZS9zdmcreG1sO2Jhc2U2NCxQSE4yWnlCNGJXeHVjejBpYUhSMGNEb3ZMM2QzZHk1M015NXZjbWN2TWpBd01DOXpkbWNpSUhacFpYZENiM2c5SWpBZ01DQTJOQ0EyTkNJK1BISmxZM1FnZDJsa2RHZzlJalkwSWlCb1pXbG5hSFE5SWpZMElpQnllRDBpTVRRaUlHWnBiR3c5SWlNd1FqQkdNVFFpTHo0OFkybHlZMnhsSUdONFBTSXpNaUlnWTNrOUlqTXlJaUJ5UFNJeU1DSWdabWxzYkQwaWJtOXVaU0lnYzNSeWIydGxQU0lqTVVFeU1qTXdJaUJ6ZEhKdmEyVXRkMmxrZEdnOUlqY2lMejQ4Y0dGMGFDQmtQU0pOTXpJZ01USWdRVEl3SURJd0lEQWdNQ0F4SURVd0lETTRJaUJtYVd4c1BTSnViMjVsSWlCemRISnZhMlU5SWlORE9VRXlNamNpSUhOMGNtOXJaUzEzYVdSMGFEMGlOeUlnYzNSeWIydGxMV3hwYm1WallYQTlJbkp2ZFc1a0lpOCtQR05wY21Oc1pTQmplRDBpTXpJaUlHTjVQU0l6TWlJZ2NqMGlOQ0lnWm1sc2JEMGlJME01UVRJeU55SXZQand2YzNablBnPT0iLCAic2l6ZXMiOiAiNjR4NjQiLCAidHlwZSI6ICJpbWFnZS9zdmcreG1sIiwgInB1cnBvc2UiOiAiYW55In1dfQ==">
 <style>
-        /* No external font import — everything below uses local/system fonts so the app works fully offline. */
+        @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
 
-        .vv-wrap { height: 100dvh; width: 100vw; overflow: hidden; background: #0B0F14; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+        .vv-wrap { height: 100dvh; width: 100vw; overflow: hidden; background: #0B0F14; font-family: 'IBM Plex Sans', sans-serif; }
         .vv-wrap * { box-sizing: border-box; }
 
         .vv-app {
@@ -31,7 +31,7 @@
           background: var(--bg); z-index: 5; }
         .vv-header-eyebrow { display: flex; align-items: center; gap: 6px; color: var(--text-muted);
           font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 3px; }
-        .vv-header-title { font-family: Georgia, 'Times New Roman', serif; font-weight: 500; font-size: 20px; }
+        .vv-header-title { font-family: 'Fraunces', serif; font-weight: 500; font-size: 20px; }
         .vv-header-block { flex: 1; }
         .vv-header-btn { background: transparent; border: none; color: var(--text); width: 34px; height: 34px;
           border-radius: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; }
@@ -55,7 +55,7 @@
         .vv-detail-exit { animation: vvDetailOut 0.2s ease forwards; }
 
         .vv-section { padding: 18px 18px 4px; }
-        .vv-section-title { font-family: Georgia, 'Times New Roman', serif; font-size: 16px; font-weight: 500; }
+        .vv-section-title { font-family: 'Fraunces', serif; font-size: 16px; font-weight: 500; }
         .vv-see-all { font-size: 12px; color: var(--gold); background: none; border: none; cursor: pointer; }
 
         .vv-hero { margin: 4px 18px 16px; background: linear-gradient(180deg, var(--surface) 0%, #10151F 100%);
@@ -64,20 +64,20 @@
         .vv-dial-wrap { position: relative; width: 210px; height: 210px; }
         .vv-dial-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
         .vv-networth-label { font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px; }
-        .vv-networth-figure { font-family: Georgia, 'Times New Roman', serif; font-weight: 500; font-size: 26px; letter-spacing: -0.01em; font-variant-numeric: tabular-nums; }
-        .vv-networth-sub { font-family: 'SFMono-Regular', Menlo, Consolas, monospace; font-size: 10.5px; color: var(--text-muted); margin-top: 6px; }
+        .vv-networth-figure { font-family: 'Fraunces', serif; font-weight: 500; font-size: 26px; letter-spacing: -0.01em; font-variant-numeric: tabular-nums; }
+        .vv-networth-sub { font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: var(--text-muted); margin-top: 6px; }
         .vv-legend { width: 100%; display: flex; flex-direction: column; gap: 9px; }
         .vv-legend-row { display: flex; align-items: center; gap: 9px; font-size: 13.5px; }
         .vv-swatch { width: 9px; height: 9px; border-radius: 2px; flex-shrink: 0; }
         .vv-legend-label { color: var(--text); flex: 1; }
-        .vv-legend-pct { font-family: 'SFMono-Regular', Menlo, Consolas, monospace; color: var(--text-muted); font-size: 12px; }
-        .vv-legend-amt { font-family: 'SFMono-Regular', Menlo, Consolas, monospace; color: var(--text); font-size: 12.5px; min-width: 84px; text-align: right; }
+        .vv-legend-pct { font-family: 'IBM Plex Mono', monospace; color: var(--text-muted); font-size: 12px; }
+        .vv-legend-amt { font-family: 'IBM Plex Mono', monospace; color: var(--text); font-size: 12.5px; min-width: 84px; text-align: right; }
 
         .vv-stat-card { margin: 0 18px 20px; display: flex; align-items: center; background: var(--surface);
           border: 1px solid var(--border); border-radius: 16px; padding: 14px 16px; }
         .vv-stat-col { flex: 1; min-width: 0; }
         .vv-stat-label { font-size: 10.5px; color: var(--text-muted); display: flex; align-items: center; gap: 5px; margin-bottom: 6px; white-space: nowrap; }
-        .vv-stat-value { font-family: 'SFMono-Regular', Menlo, Consolas, monospace; font-size: 14.5px; }
+        .vv-stat-value { font-family: 'IBM Plex Mono', monospace; font-size: 14.5px; }
         .vv-stat-value.pos { color: var(--pos); }
         .vv-stat-value.neg { color: var(--neg); }
         .vv-stat-divider { width: 1px; align-self: stretch; background: var(--border); margin: 0 14px; }
@@ -86,7 +86,7 @@
         .vv-group-head { display: flex; align-items: center; gap: 10px; padding: 13px 16px; background: var(--surface-2); border-bottom: 1px solid var(--border); }
         .vv-group-icon { width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
         .vv-group-name { font-weight: 600; font-size: 13.5px; flex: 1; }
-        .vv-group-total { font-family: 'SFMono-Regular', Menlo, Consolas, monospace; font-size: 13.5px; }
+        .vv-group-total { font-family: 'IBM Plex Mono', monospace; font-size: 13.5px; }
 
         .vv-swipe-wrap { position: relative; overflow: hidden; border-bottom: 1px solid var(--border); }
         .vv-swipe-wrap:last-child { border-bottom: none; }
@@ -96,13 +96,13 @@
         .vv-swipe-action.edit { background: #3B4A6B; }
         .vv-swipe-action.delete { background: #7A2E2E; }
         .vv-swipe-content { position: relative; background: var(--surface); touch-action: pan-y;
-          transition: transform 0.18s ease; will-change: transform; user-select: none; -webkit-user-select: none; }
+          transition: transform 0.18s ease; will-change: transform; }
 
         .vv-row { display: flex; align-items: center; gap: 12px; padding: 13px 16px; cursor: pointer; }
         .vv-row-main { flex: 1; min-width: 0; }
         .vv-row-label { font-size: 14px; color: var(--text); }
         .vv-row-inst { font-size: 11.5px; color: var(--text-muted); margin-top: 2px; }
-        .vv-row-balance { font-family: 'SFMono-Regular', Menlo, Consolas, monospace; font-size: 13.5px; color: var(--text); text-align: right; }
+        .vv-row-balance { font-family: 'IBM Plex Mono', monospace; font-size: 13.5px; color: var(--text); text-align: right; }
         .vv-row-eye { background: none; border: none; color: var(--text-muted); width: 26px; height: 26px;
           border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; }
         .vv-row-eye:hover { background: var(--surface-2); color: var(--text); }
@@ -114,7 +114,7 @@
         .vv-txn-main { flex: 1; min-width: 0; }
         .vv-txn-note { font-size: 13.5px; color: var(--text); }
         .vv-txn-meta { font-size: 11.5px; color: var(--text-muted); margin-top: 2px; }
-        .vv-txn-amt { font-family: 'SFMono-Regular', Menlo, Consolas, monospace; font-size: 13.5px; flex-shrink: 0; }
+        .vv-txn-amt { font-family: 'IBM Plex Mono', monospace; font-size: 13.5px; flex-shrink: 0; }
         .vv-date-heading { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); padding: 14px 16px 6px; }
         .vv-empty { padding: 18px 16px; color: var(--text-muted); font-size: 13px; font-style: italic; }
 
@@ -149,7 +149,7 @@
           border-bottom: 1px solid var(--border); font-size: 13.5px; }
         .vv-settings-row:last-child { border-bottom: none; }
         .vv-settings-label { color: var(--text-muted); font-size: 12.5px; }
-        .vv-settings-value { color: var(--text); font-size: 13.5px; font-family: 'SFMono-Regular', Menlo, Consolas, monospace; }
+        .vv-settings-value { color: var(--text); font-size: 13.5px; font-family: 'IBM Plex Mono', monospace; }
         .vv-danger-btn { width: 100%; background: rgba(217,108,108,0.1); border: 1px solid rgba(217,108,108,0.4);
           color: var(--neg); border-radius: 12px; padding: 13px; font-size: 13.5px; font-weight: 600; cursor: pointer;
           display: flex; align-items: center; justify-content: center; gap: 6px; }
@@ -174,7 +174,7 @@
         .vv-detail-tag { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-muted);
           background: var(--surface-2); padding: 5px 12px; border-radius: 999px; margin-bottom: 14px; }
         .vv-detail-balance-label { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); }
-        .vv-detail-balance { font-family: Georgia, 'Times New Roman', serif; font-size: 34px; margin-top: 6px; font-variant-numeric: tabular-nums; }
+        .vv-detail-balance { font-family: 'Fraunces', serif; font-size: 34px; margin-top: 6px; font-variant-numeric: tabular-nums; }
         .vv-detail-inst { font-size: 12.5px; color: var(--text-muted); margin-top: 4px; }
         .vv-sparkline { width: 100%; height: 48px; margin-top: 16px; }
         .vv-detail-actions { display: flex; gap: 10px; margin: 20px 18px 8px; }
@@ -196,12 +196,12 @@
         @keyframes vvSlideDown { from { transform: translateY(0); } to { transform: translateY(100%); } }
         .vv-drag-handle { width: 36px; height: 4px; border-radius: 999px; background: var(--border); margin: 4px auto 14px; }
         .vv-sheet-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
-        .vv-sheet-title { font-family: Georgia, 'Times New Roman', serif; font-size: 18px; font-weight: 500; }
+        .vv-sheet-title { font-family: 'Fraunces', serif; font-size: 18px; font-weight: 500; }
 
         .vv-field { margin-bottom: 14px; }
         .vv-field label { display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 6px; }
         .vv-input, .vv-select { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 10px;
-          padding: 12px 13px; color: var(--text); font-size: 15px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+          padding: 12px 13px; color: var(--text); font-size: 15px; font-family: 'IBM Plex Sans', sans-serif; }
         .vv-input:focus, .vv-select:focus { outline: 2px solid var(--gold); outline-offset: 1px; border-color: transparent; }
         .vv-cat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
         .vv-cat-opt { display: flex; flex-direction: column; align-items: center; gap: 5px; border: 1px solid var(--border);
@@ -232,6 +232,12 @@
 
         .vv-footnote { text-align: center; color: var(--text-muted); font-size: 11.5px; padding: 10px 20px 4px; }
 
+        .vv-banner { flex-shrink: 0; display: flex; align-items: center; gap: 10px; padding: 10px 16px;
+          background: rgba(217,108,108,0.14); border-bottom: 1px solid rgba(217,108,108,0.35);
+          color: #F0B4B4; font-size: 12px; line-height: 1.4; }
+        .vv-banner button { margin-left: auto; background: none; border: none; color: #F0B4B4; cursor: pointer;
+          flex-shrink: 0; display: flex; align-items: center; }
+
         /* extra polish added for the standalone build */
         .vv-sparkline-path { stroke-dasharray: 100; stroke-dashoffset: 100; animation: vvArc 1s cubic-bezier(.25,.75,.2,1) forwards; animation-delay: .15s; }
         .vv-app button { -webkit-tap-highlight-color: transparent; }
@@ -244,6 +250,7 @@
 <body>
   <div class="vv-wrap">
     <div class="vv-app" id="app">
+      <div id="bannerRoot"></div>
       <div class="vv-header" id="header"></div>
       <div class="vv-content" id="content"></div>
       <div id="tabbarRoot"></div>
@@ -322,10 +329,8 @@ const store = {
 
 /* ---------- formatting helpers ---------- */
 function formatINR(n) {
-  const num = Number(n);
-  const safe = Number.isFinite(num) ? num : 0;
-  const sign = safe < 0 ? "-" : "";
-  const abs = Math.abs(Math.round(safe));
+  const sign = n < 0 ? "-" : "";
+  const abs = Math.abs(Math.round(n));
   return sign + "₹" + abs.toLocaleString("en-IN");
 }
 function formatTime(iso) { return new Date(iso).toLocaleTimeString("en-IN", { hour: "numeric", minute: "2-digit" }); }
@@ -620,39 +625,22 @@ function renderFab() {
 const SWIPE_WIDTH = 136;
 function attachSwipe(el, id) {
   let dragX = state.openRowId === id ? -SWIPE_WIDTH : 0;
-  let dragging = false, moved = false, directionDecided = false, captured = false;
-  let startX = 0, startY = 0, startTranslate = 0, pointerId = null;
+  let dragging = false, moved = false, startX = 0, startTranslate = 0;
   const content = el.querySelector(".vv-swipe-content");
   content.style.transform = `translateX(${dragX}px)`;
   content.addEventListener("pointerdown", (e) => {
-    dragging = false; moved = false; directionDecided = false; captured = false;
-    startX = e.clientX; startY = e.clientY; startTranslate = dragX; pointerId = e.pointerId;
+    dragging = true; moved = false; startX = e.clientX; startTranslate = dragX;
   });
   content.addEventListener("pointermove", (e) => {
-    if (pointerId === null || e.pointerId !== pointerId) return;
-    const deltaX = e.clientX - startX, deltaY = e.clientY - startY;
-    if (!directionDecided) {
-      // Wait for a clear enough movement before committing to a direction —
-      // this keeps normal vertical scrolling working when a swipe starts on a row.
-      if (Math.abs(deltaX) < 6 && Math.abs(deltaY) < 6) return;
-      directionDecided = true;
-      if (Math.abs(deltaX) > Math.abs(deltaY)) {
-        dragging = true;
-        try { content.setPointerCapture(pointerId); captured = true; } catch (err) {}
-      } else {
-        return; // vertical gesture — let the browser handle scrolling
-      }
-    }
     if (!dragging) return;
-    if (Math.abs(deltaX) > 4) moved = true;
-    dragX = Math.max(-SWIPE_WIDTH, Math.min(0, startTranslate + deltaX));
+    const delta = e.clientX - startX;
+    if (Math.abs(delta) > 4) moved = true;
+    dragX = Math.max(-SWIPE_WIDTH, Math.min(0, startTranslate + delta));
     content.style.transform = `translateX(${dragX}px)`;
   });
-  const finish = (e) => {
-    if (captured && pointerId !== null) { try { content.releasePointerCapture(pointerId); } catch (err) {} }
-    if (!dragging) { pointerId = null; return; }
+  const finish = () => {
+    if (!dragging) return;
     dragging = false;
-    pointerId = null;
     if (!moved) {
       if (state.openRowId === id) { state.openRowId = null; renderContent(); }
       else { openAccountDetail(id); }
@@ -681,10 +669,9 @@ function homeHTML() {
     ticks += `<line x1="${p1.x}" y1="${p1.y}" x2="${p2.x}" y2="${p2.y}" stroke="${long ? "#2C3648" : "#1E2634"}" stroke-width="${long ? 1.6 : 1}"/>`;
   }
   const arcs = ring.map((seg, i) => `<path d="${describeArc(cx, cy, r, seg.start, seg.end)}" fill="none" stroke="${CATEGORIES[seg.category].color}" stroke-width="${stroke}" stroke-linecap="round" pathLength="100" class="vv-arc" style="animation-delay:${i * 90}ms"/>`).join("");
-  const positiveTotal = CATEGORY_ORDER.reduce((s, c) => s + Math.max(byCategory[c].total, 0), 0);
   const legend = CATEGORY_ORDER.filter((c) => byCategory[c].items.length > 0).map((c, i) => {
     const data = byCategory[c];
-    const pct = positiveTotal > 0 ? (Math.max(data.total, 0) / positiveTotal) * 100 : 0;
+    const pct = netWorth !== 0 ? (data.total / netWorth) * 100 : 0;
     return `
       <div class="vv-legend-row vv-rise" style="animation-delay:${300 + i * 60}ms">
         <span class="vv-swatch" style="background:${CATEGORIES[c].color}"></span>
@@ -854,7 +841,7 @@ function settingsHTML() {
     </div>
 
     <div class="vv-about-block">
-      <div style="font-family:Georgia,'Times New Roman',serif;font-size:15px;color:var(--text);margin-bottom:4px">Wallet Vault</div>
+      <div style="font-family:'Fraunces',serif;font-size:15px;color:var(--text);margin-bottom:4px">Wallet Vault</div>
       Version 1.0 · Your accounts and transactions are stored on this device's browser storage and aren't visible to anyone else.
     </div>`;
 }
@@ -944,6 +931,8 @@ function wireContentEvents() {
     const search = document.getElementById("activitySearchInput");
     if (search) {
       search.oninput = () => { state.activitySearch = search.value; renderActivityListOnly(); };
+      search.focus();
+      search.selectionStart = search.selectionEnd = search.value.length;
     }
   }
   if (state.activeTab === "settings") wireSettingsEvents();
@@ -1076,44 +1065,13 @@ function handleImportFile(e) {
   reader.onload = () => {
     try {
       const data = JSON.parse(reader.result);
-      const rawAccounts = Array.isArray(data.accounts) ? data.accounts : null;
-      const rawTxns = Array.isArray(data.transactions) ? data.transactions : null;
-      if (!rawAccounts || !rawTxns) { showToast("That file doesn't look like a Wallet Vault backup"); return; }
-
-      const validIds = new Set();
-      const importedAccounts = rawAccounts
-        .filter((a) => a && typeof a.id === "string" && typeof a.label === "string" && a.label.trim())
-        .map((a) => {
-          validIds.add(a.id);
-          return {
-            id: a.id,
-            label: a.label.trim(),
-            institution: typeof a.institution === "string" ? a.institution : "",
-            category: CATEGORIES[a.category] ? a.category : "other",
-            balance: Number.isFinite(Number(a.balance)) ? Number(a.balance) : 0,
-          };
-        });
-      const importedTxns = rawTxns
-        .filter((t) => t && validIds.has(t.accountId) && (t.type === "credit" || t.type === "debit") && !isNaN(new Date(t.date).getTime()))
-        .map((t) => ({
-          id: typeof t.id === "string" ? t.id : genId(),
-          accountId: t.accountId,
-          type: t.type,
-          amount: Number.isFinite(Number(t.amount)) ? Math.abs(Number(t.amount)) : 0,
-          note: typeof t.note === "string" && t.note.trim() ? t.note.trim() : (t.type === "credit" ? "Money in" : "Money out"),
-          date: new Date(t.date).toISOString(),
-          transferId: typeof t.transferId === "string" ? t.transferId : undefined,
-        }));
-
-      if (importedAccounts.length === 0) { showToast("No valid accounts found in that file"); return; }
-
+      const importedAccounts = Array.isArray(data.accounts) ? data.accounts : null;
+      const importedTxns = Array.isArray(data.transactions) ? data.transactions : null;
+      if (!importedAccounts || !importedTxns) { showToast("That file doesn't look like a Wallet Vault backup"); return; }
       const prevAccounts = state.accounts, prevTxns = state.txns;
       persistAccounts(importedAccounts); persistTxns(importedTxns);
-      state.detailId = null; state.openRowId = null; state.activityFilter = "all"; state.activitySearch = "";
-      renderHeader(); renderContent(); renderTabbar(); renderFab();
-      showToast(`Imported ${importedAccounts.length} account${importedAccounts.length === 1 ? "" : "s"}`, "Undo", () => {
-        persistAccounts(prevAccounts); persistTxns(prevTxns); renderHeader(); renderContent(); renderTabbar(); renderFab();
-      });
+      renderHeader(); renderContent();
+      showToast(`Imported ${importedAccounts.length} account${importedAccounts.length === 1 ? "" : "s"}`, "Undo", () => { persistAccounts(prevAccounts); persistTxns(prevTxns); renderContent(); });
     } catch (err) {
       showToast("Couldn't read that file — is it a valid backup?");
     } finally { e.target.value = ""; }
@@ -1307,9 +1265,39 @@ function openTxnSheet(accountId) {
   };
 }
 
+/* ---------- storage safety banner ---------- */
+function storageAvailable() {
+  try {
+    const k = "__vv_test__";
+    localStorage.setItem(k, "1");
+    localStorage.removeItem(k);
+    return true;
+  } catch (e) { return false; }
+}
+let bannerDismissed = false;
+function renderBanner() {
+  const root = document.getElementById("bannerRoot");
+  if (state.storageOk || bannerDismissed) { root.innerHTML = ""; return; }
+  root.innerHTML = `
+    <div class="vv-banner">
+      <span>Your browser is blocking saved storage (private/incognito mode, or storage is disabled). Anything you add now will disappear when you close this tab.</span>
+      <button id="bannerDismiss" aria-label="Dismiss">${ICONS.x}</button>
+    </div>`;
+  document.getElementById("bannerDismiss").onclick = () => { bannerDismissed = true; renderBanner(); };
+}
+
+/* ---------- keyboard: Escape closes sheet, then detail ---------- */
+document.addEventListener("keydown", (e) => {
+  if (e.key !== "Escape") return;
+  if (state.sheet !== null || document.querySelector(".vv-sheet-overlay")) { closeSheet(); return; }
+  if (state.detailId) closeDetail();
+});
+
 /* ---------- boot ---------- */
 function boot() {
+  state.storageOk = storageAvailable() && state.storageOk;
   applyTheme();
+  renderBanner();
   renderHeader();
   renderContent();
   renderTabbar();
